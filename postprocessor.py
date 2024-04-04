@@ -98,11 +98,10 @@ def _detect_blob_nms(hm, _score_threshold = 0.5, sigma = 2.5, _use_hm_weight = F
         hm[dist_map<=sigma**2] = 0.
     return xys, scores
 
-def run(probs, annos_transformed, visibilities, _blob_det_method = 'concomp', _sigmas = [2.5]):
+def run(probs, annos_transformed, _blob_det_method = 'concomp', _sigmas = [2.5]):
     results = defaultdict(lambda: defaultdict(dict))
     hms_         = probs.cpu().numpy().astype(np.float32)
     annos_transformed = annos_transformed.cpu().numpy()
-    visibilities = visibilities.cpu().numpy()
     tp, tn, fp1, fp2, fn = 0, 0, 0, 0, 0
 
     b,s,h,w = hms_.shape

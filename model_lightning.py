@@ -39,7 +39,7 @@ class LitTrackNetV2(L.LightningModule):
             wandb_logger.watch(self.net, log = "all", log_graph = True)
     
     def training_step(self, batch, batch_idx):
-        imgs, heatmaps, annos, annos_transformed, vis = batch
+        imgs, heatmaps, annos_transformed = batch
 
         logits = self.net(imgs)
 
@@ -81,7 +81,7 @@ class LitTrackNetV2(L.LightningModule):
         self.training_step_unions.clear()
     
     def validation_step(self, batch, batch_idx):
-        imgs, heatmaps, annos, annos_transformed, visibilities = batch
+        imgs, heatmaps, annos_transformed = batch
 
         logits = self.net(imgs)
 
@@ -104,7 +104,7 @@ class LitTrackNetV2(L.LightningModule):
             if len(self.loggers) > 1:
                 wandb_logger = self.loggers[1].experiment
                 wandb_logger.log({f"Comparison_val_{self.current_epoch}": [wandb.Image(grid, caption = f"Epoch {self.current_epoch} Iteration {batch_idx}")]})
-        metrics = run(probs = probs, annos_transformed = annos_transformed, visibilities = visibilities, _blob_det_method = 'concomp', _sigmas = [2.5])
+        metrics = run(probs = probs, annos_transformed = annos_transformed, _blob_det_method = 'concomp', _sigmas = [2.5])
         self.tp += metrics[0]
         self.tn += metrics[1]
         self.fp1 += metrics[2]
