@@ -51,7 +51,7 @@ class Tennis(Dataset):
     
     def filter_data(self, data):
         new_data = []
-        for i in range(len(self.data)):
+        for i in range(len(data)):
             max_elems = np.array(self.data[i]['kps']).max(axis=0)
             min_elems = np.array(self.data[i]['kps']).min(axis=0)
             if max_elems[0] < self.input_width and min_elems[0] > 0 and max_elems[1] < self.input_height and \
