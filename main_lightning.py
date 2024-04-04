@@ -102,9 +102,9 @@ if __name__ == "__main__":
         scheduler = None
 
     if opt.weight_init:
-        model = LitTrackNetV2(frame_in = opt.frame_in * 3, frame_out = opt.frame_in, optimizer = optimizer, weight_init = weight_init, log_image_every_n_steps = opt.log_image_every_n_steps, lr = opt.learning_rate, scheduler = scheduler)
+        model = LitTrackNetV2(frame_in = opt.frame_in * 3, frame_out = opt.frame_in * 15, optimizer = optimizer, weight_init = weight_init, log_image_every_n_steps = opt.log_image_every_n_steps, lr = opt.learning_rate, scheduler = scheduler)
     else:
-        model = LitTrackNetV2(frame_in = opt.frame_in * 3, frame_out = opt.frame_in, optimizer = optimizer, log_image_every_n_steps = opt.log_image_every_n_steps, lr = opt.learning_rate, scheduler = scheduler)
+        model = LitTrackNetV2(frame_in = opt.frame_in * 3, frame_out = opt.frame_in * 15, optimizer = optimizer, log_image_every_n_steps = opt.log_image_every_n_steps, lr = opt.learning_rate, scheduler = scheduler)
 
 
     # fast_dev_run = True for testing purposes

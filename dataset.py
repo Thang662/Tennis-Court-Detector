@@ -70,7 +70,7 @@ class Tennis(Dataset):
         for path, keypoint in zip(paths, keypoints):
             img = cv2.imread(path)
             img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-            transformed = self.transform(image = img, keypoints = keypoint)
+            transformed = self.transform(image = img, keypoints = [[kp[0] - 0.1, kp[1] - 0.1] for kp in keypoint])
             img = transformed['image']
             keypoint_transformed = transformed['keypoints']
             x_ct, y_ct = line_intersection((keypoint_transformed[0][0], keypoint_transformed[0][1], keypoint_transformed[3][0], keypoint_transformed[3][1]), 
