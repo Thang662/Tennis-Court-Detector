@@ -56,7 +56,7 @@ class Tennis(Dataset):
             min_elems = np.array(self.data[i]['kps']).min(axis=0)
             if max_elems[0] < self.input_width and min_elems[0] > 0 and max_elems[1] < self.input_height and \
                     min_elems[1] > 0:
-                new_data.append(self.data[i])
+                new_data.append(data[i])
         return new_data
     
     def load_data(self):
