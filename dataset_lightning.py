@@ -27,13 +27,13 @@ class TennisDataModule(L.LightningDataModule):
             self.predict_data = Tennis(root = self.root, train = False, frame_in = self.frame_in, is_sequential = self.is_sequential, transform = self.test_transform, r = self.r, w = self.w, h = self.h)
 
     def train_dataloader(self):
-        return DataLoader(self.train_data, batch_size = self.batch_size, num_workers = self.num_workers, shuffle = self.shuffle, persistent_workers = True)
+        return DataLoader(self.train_data, batch_size = self.batch_size, num_workers = self.num_workers, shuffle = self.shuffle, persistent_workers = True, pin_memory = True)
     
     def val_dataloader(self):
-        return DataLoader(self.val_data, batch_size = self.batch_size, num_workers = self.num_workers, shuffle = False, persistent_workers = True)
+        return DataLoader(self.val_data, batch_size = self.batch_size, num_workers = self.num_workers, shuffle = False, persistent_workers = True, pin_memory = True)
     
     def test_dataloader(self):
-        return DataLoader(self.test_data, batch_size = self.batch_size, num_workers = self.num_workers, shuffle = False, persistent_workers = True)
+        return DataLoader(self.test_data, batch_size = self.batch_size, num_workers = self.num_workers, shuffle = False, persistent_workers = True, pin_memory = True)
     
     def predict_dataloader(self):
-        return DataLoader(self.predict_data, batch_size = self.batch_size, num_workers = self.num_workers, shuffle = False, persistent_workers = True)
+        return DataLoader(self.predict_data, batch_size = self.batch_size, num_workers = self.num_workers, shuffle = False, persistent_workers = True, pin_memory = True)
