@@ -49,9 +49,20 @@ class Tennis(Dataset):
     def __len__(self):
         return len(self.data)
     
+    def filter_data(self, data):
+        new_data = []
+        for i in range(len(self.data)):
+            max_elems = np.array(self.data[i]['kps']).max(axis=0)
+            min_elems = np.array(self.data[i]['kps']).min(axis=0)
+            if max_elems[0] < self.input_width and min_elems[0] > 0 and max_elems[1] < self.input_height and \
+                    min_elems[1] > 0:
+                new_data.append(self.data[i])
+        return new_data
+    
     def load_data(self):
         with open(self.root / f'data_{"train" if self.train else "val"}.json', 'r') as f:
             data = json.load(f)
+        data = self.filter_data(data)
         tmp_data = []
         step = 1 if self.is_sequential else self.frame_in
         for i in range(0, len(data) - self.frame_in + 1, step):
@@ -70,7 +81,7 @@ class Tennis(Dataset):
         for path, keypoint in zip(paths, keypoints):
             img = cv2.imread(path)
             img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-            transformed = self.transform(image = img, keypoints = [[kp[0] - 0.1, kp[1] - 0.1] for kp in keypoint])
+            transformed = self.transform(image = img, keypoints = keypoint)
             img = transformed['image']
             keypoint_transformed = transformed['keypoints']
             x_ct, y_ct = line_intersection((keypoint_transformed[0][0], keypoint_transformed[0][1], keypoint_transformed[3][0], keypoint_transformed[3][1]), 
