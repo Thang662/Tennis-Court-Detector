@@ -14,20 +14,6 @@ import sympy
 
 log = logging.getLogger(__name__)
 
-def line_intersection(line1, line2):
-    """
-    Find 2 lines intersection point
-    """
-    l1 = Line((line1[0], line1[1]), (line1[2], line1[3]))
-    l2 = Line((line2[0], line2[1]), (line2[2], line2[3]))
-
-    intersection = l1.intersection(l2)
-    point = None
-    if len(intersection) > 0:
-        if isinstance(intersection[0], sympy.geometry.point.Point2D):
-            point = intersection[0].coordinates
-    return point
-
 def seed_everything(seed: Optional[int] = 42, workers: bool = True) -> int:
     """Function that sets seed for pseudo-random number generators in: pytorch, numpy, python.random In addition,
     sets the following environment variables:

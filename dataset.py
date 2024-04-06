@@ -4,8 +4,8 @@ import numpy as np
 from torch.utils.data import Dataset
 import albumentations as A
 import cv2
-from utils import line_intersection
-from heatmap import gen_binary_map
+from line_intersect import line_intersection, get_intersect
+from heatmap import gen_binary_map, faster_gen_binary_map
 import matplotlib.pyplot as plt
 import torch
 from albumentations.pytorch import ToTensorV2
@@ -75,19 +75,17 @@ class Tennis(Dataset):
         paths, keypoints = self.data[index]
         imgs = []
         heat_maps = []
-        annos = []
         annos_transformed = []
-        vises = []
         for path, keypoint in zip(paths, keypoints):
             img = cv2.imread(path)
             img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
             transformed = self.transform(image = img, keypoints = keypoint)
             img = transformed['image']
             keypoint_transformed = transformed['keypoints']
-            x_ct, y_ct = line_intersection((keypoint_transformed[0][0], keypoint_transformed[0][1], keypoint_transformed[3][0], keypoint_transformed[3][1]), 
-                                           (keypoint_transformed[1][0], keypoint_transformed[1][1], keypoint_transformed[2][0], keypoint_transformed[2][1]))
+            x_ct, y_ct = get_intersect((keypoint_transformed[0][0], keypoint_transformed[0][1]), (keypoint_transformed[3][0], keypoint_transformed[3][1]), 
+                                           (keypoint_transformed[1][0], keypoint_transformed[1][1]), (keypoint_transformed[2][0], keypoint_transformed[2][1]))
             keypoint_transformed = keypoint_transformed + [[float(x_ct), float(y_ct)]]
-            tmp_heat_maps = [gen_binary_map((img.shape[2], img.shape[1]), kp, self.r) for kp in keypoint_transformed]
+            tmp_heat_maps = [faster_gen_binary_map((img.shape[2], img.shape[1]), kp, self.r) for kp in keypoint_transformed]
             imgs.append(img)
             heat_maps.append(torch.tensor(np.array(tmp_heat_maps)))
             annos_transformed.append(torch.tensor(keypoint_transformed))
